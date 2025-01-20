@@ -24,6 +24,13 @@ function createBot() {
     bot.on('spawn', () => {
         console.log(`${username} has joined the server!`);
 
+        // Periodically log that the bot is still in the server
+        setInterval(() => {
+            if (bot && bot.isSpawned) {
+                console.log(`${username} is still in the server!`);
+            }
+        }, 60000); // Log every 1 minute (60000 ms)
+
         // Random movement and fighting
         setInterval(() => {
             const nearbyEntities = bot.entities; // Get all nearby entities
@@ -66,13 +73,6 @@ function createBot() {
                 }, 200); // Stop moving after 0.2 seconds
             }
         }, 300); // Check every 0.3 seconds
-
-        setTimeout(() => {
-            if (bot) {
-                console.log(`${username} has left the server!`);
-                bot.quit();
-            }
-        }, 5000); // Stay in the server for 5 seconds
     });
 
     bot.on('chat', (username, message) => {
@@ -81,13 +81,13 @@ function createBot() {
 
     bot.on('error', (err) => {
         console.error('Bot error:', err);
-        if (bot) {
-            bot.quit();
-        }
+        // Keep the bot running after an error, you may log it or handle reconnects here
     });
 
     bot.on('end', () => {
-        setTimeout(createBot, 90000); // Restart after 90 seconds
+        console.log(`${username} has been disconnected, reconnecting...`);
+        // Don't restart the bot; let it stay in the server
+        // If you want, you can add some retry logic here
     });
 }
 

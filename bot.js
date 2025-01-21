@@ -6,9 +6,6 @@ const serverIP = 'infinitefun.falixsrv.me';  // Corrected IP from your original 
 const serverPort = 28007;
 const version = '1.20.2';
 
-// Bot names for ServerManager1, ServerManager2, and ServerManager3
-const botNames = ['ServerManager1', 'ServerManager2', 'ServerManager3'];
-
 // Function to create and handle a bot
 function createBot(username) {
     const bot = mineflayer.createBot({
@@ -20,67 +17,51 @@ function createBot(username) {
 
     bot.on('spawn', () => {
         console.log(`${username} has joined the server!`);
+
+        // Leave the server after 3 minutes
+        setTimeout(() => {
+            if (bot) {
+                console.log(`${username} is leaving the server!`);
+                bot.quit();
+            }
+        }, 3 * 60 * 1000); // 3 minutes
+    });
+
+    bot.on('chat', (username, message) => {
+        // Ignore chat messages
     });
 
     bot.on('error', (err) => {
         console.error(`${username} encountered an error:`, err);
-        process.exit(1);  // Exit the entire process on error
+        if (bot) {
+            bot.quit();
+        }
     });
 
     bot.on('end', () => {
-        console.log(`${username} has been disconnected`);
-        process.exit(1);  // Exit the entire process on disconnection
+        console.log(`${username} has left the server!`);
+        // Reconnect the bot after 1 minute
+        setTimeout(() => {
+            createBot(username); // Recreate the bot after 1 minute
+        }, 60000); // Wait for 1 minute before rejoining
     });
 
     return bot;
 }
 
-// Function for ServerManager1 to join for 3 minutes, leave for 1 minute, and repeat
+// Cycle for ServerManager1: Joins for 3 minutes, leaves for 1 minute
 function serverManager1Cycle() {
     const bot = createBot('ServerManager1');
-
-    setInterval(() => {
-        console.log('ServerManager1 is joining the server...');
-        bot._client.write('login', { username: 'ServerManager1' });
-
-        // Stay for 3 minutes
-        setTimeout(() => {
-            console.log('ServerManager1 is leaving the server...');
-            bot.quit();
-        }, 3 * 60 * 1000); // Stay for 3 minutes
-    }, 4 * 60 * 1000); // 3 minutes join + 1 minute leave
 }
 
-// Function for ServerManager2 to join for 3 minutes, leave for 1 minute, and repeat
+// Cycle for ServerManager2: Joins for 3 minutes, leaves for 1 minute
 function serverManager2Cycle() {
     const bot = createBot('ServerManager2');
-
-    setInterval(() => {
-        console.log('ServerManager2 is joining the server...');
-        bot._client.write('login', { username: 'ServerManager2' });
-
-        // Stay for 3 minutes
-        setTimeout(() => {
-            console.log('ServerManager2 is leaving the server...');
-            bot.quit();
-        }, 3 * 60 * 1000); // Stay for 3 minutes
-    }, 4 * 60 * 1000); // 3 minutes join + 1 minute leave
 }
 
-// Function for ServerManager3 to join for 3 minutes, leave for 1 minute, and repeat
+// Cycle for ServerManager3: Joins for 3 minutes, leaves for 1 minute
 function serverManager3Cycle() {
     const bot = createBot('ServerManager3');
-
-    setInterval(() => {
-        console.log('ServerManager3 is joining the server...');
-        bot._client.write('login', { username: 'ServerManager3' });
-
-        // Stay for 3 minutes
-        setTimeout(() => {
-            console.log('ServerManager3 is leaving the server...');
-            bot.quit();
-        }, 3 * 60 * 1000); // Stay for 3 minutes
-    }, 4 * 60 * 1000); // 3 minutes join + 1 minute leave
 }
 
 // Start all bot cycles with staggered start times
@@ -90,7 +71,7 @@ function startBotCycles() {
     setTimeout(serverManager3Cycle, 2 * 60000); // ServerManager3 starts at 2 minutes
 }
 
-// Start the bot actions
+// Start the bot cycles
 startBotCycles();
 
 // HTTP Server to respond to pings

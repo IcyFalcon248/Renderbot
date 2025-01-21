@@ -2,8 +2,8 @@ const mineflayer = require('mineflayer');
 const http = require('http');
 
 // Define the server IP and port
-const serverIP = 'infinitefun.falixsrv.me';  // Corrected IP from your original code
-const serverPort = 28007;
+const serverIP = 'infinityvelocity.falixsrv.me';  // Corrected IP from your original code
+const serverPort = 31706;
 const version = '1.20.2';
 
 // Function to create and handle a bot

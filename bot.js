@@ -24,7 +24,7 @@ function createBot(username) {
                 console.log(`${username} is leaving the server!`);
                 bot.quit();
             }
-        }, 3 * 60 * 1000); // 3 minutes
+        }, 30 * 60 * 1000); // 30 minutes
     });
 
     bot.on('chat', (username, message) => {
@@ -43,32 +43,26 @@ function createBot(username) {
         // Reconnect the bot after 1 minute
         setTimeout(() => {
             createBot(username); // Recreate the bot after 1 minute
-        }, 60000); // Wait for 1 minute before rejoining
+        }, 600000); // Wait for 10 minute before rejoining
     });
 
     return bot;
 }
 
-// Cycle for ServerManager1: Joins for 3 minutes, leaves for 1 minute
+// Cycle for ServerManager1: Joins for 30 minutes, leaves for 10 minute
 function serverManager1Cycle() {
     const bot = createBot('ServerManager1');
 }
 
-// Cycle for ServerManager2: Joins for 3 minutes, leaves for 1 minute
+// Cycle for ServerManager2: Joins for 30 minutes, leaves for 10 minute
 function serverManager2Cycle() {
     const bot = createBot('ServerManager2');
-}
-
-// Cycle for ServerManager3: Joins for 3 minutes, leaves for 1 minute
-function serverManager3Cycle() {
-    const bot = createBot('ServerManager3');
 }
 
 // Start all bot cycles with staggered start times
 function startBotCycles() {
     setTimeout(serverManager1Cycle, 0 * 60000); // ServerManager1 starts at 0 minutes
-    setTimeout(serverManager2Cycle, 1 * 60000); // ServerManager2 starts at 1 minute
-    setTimeout(serverManager3Cycle, 2 * 60000); // ServerManager3 starts at 2 minutes
+    setTimeout(serverManager2Cycle, 15 * 60000); // ServerManager2 starts at 15 minute
 }
 
 // Start the bot cycles

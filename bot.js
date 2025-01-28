@@ -43,26 +43,32 @@ function createBot(username) {
         // Reconnect the bot after 1 minute
         setTimeout(() => {
             createBot(username); // Recreate the bot after 1 minute
-        }, 600000); // Wait for 10 minute before rejoining
+        }, 300000); // Wait for 5 minute before rejoining
     });
 
     return bot;
 }
 
-// Cycle for ServerManager1: Joins for 30 minutes, leaves for 10 minute
+// Cycle for ServerManager1: Joins for 30 minutes, leaves for 5 minute
 function serverManager1Cycle() {
     const bot = createBot('ServerManager1');
 }
 
-// Cycle for ServerManager2: Joins for 30 minutes, leaves for 10 minute
+// Cycle for ServerManager2: Joins for 30 minutes, leaves for 5 minute
 function serverManager2Cycle() {
     const bot = createBot('ServerManager2');
+}
+
+// Cycle for ServerManager22: Joins for 30 minutes, leaves for 5 minute
+function serverManager22Cycle() {
+    const bot = createBot('ServerManager22');
 }
 
 // Start all bot cycles with staggered start times
 function startBotCycles() {
     setTimeout(serverManager1Cycle, 0 * 60000); // ServerManager1 starts at 0 minutes
-    setTimeout(serverManager2Cycle, 15 * 60000); // ServerManager2 starts at 15 minute
+    setTimeout(serverManager2Cycle, 10 * 60000); // ServerManager2 starts at 10 minutes
+    setTimeout(serverManager22Cycle, 20 * 60000); // ServerManager22 starts at 10 minutes
 }
 
 // Start the bot cycles
